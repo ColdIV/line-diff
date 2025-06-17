@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Line Difference Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 45%;
+      height: 200px;
+      margin-right: 5%;
+      vertical-align: top;
+    }
+    #results {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .added {
+      color: green;
+    }
+    .removed {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h2>Line Difference Checker (Ignore Order)</h2>
+  <textarea id="textA" placeholder="Paste original text here..."></textarea>
+  <textarea id="textB" placeholder="Paste modified text here..."></textarea>
+  <br><br>
+  <button onclick="compareLines()">Compare</button>
+  <div id="results"></div>
+
+  <script>
+    function compareLines() {
+      const textA = document.getElementById('textA').value;
+      const textB = document.getElementById('textB').value;
+
+      const linesA = new Set(textA.split('\n').map(line => line.trim()).filter(line => line));
+      const linesB = new Set(textB.split('\n').map(line => line.trim()).filter(line => line));
+
+      const removed = [...linesA].filter(line => !linesB.has(line));
+      const added = [...linesB].filter(line => !linesA.has(line));
+
+      let result = '';
+      removed.forEach(line => result += `<div class="removed">- ${line}</div>`);
+      added.forEach(line => result += `<div class="added">+ ${line}</div>`);
+
+      document.getElementById('results').innerHTML = result || 'No differences found.';
+    }
+  </script>
+</body>
+</html>
